@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Services - Sélection de biens</title>
     <style>
-        /* Vos styles existants ici */
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
@@ -215,27 +214,28 @@
                     <a href="page_villa_3.html" style="text-decoration: none; color: #333; font-weight: bold;">Découvrir ce bien</a>
                 </div>
             </div>
+
+            <!-- Vignette 4 -->
+            <div class="col option" data-produit="Maison" data-saveur="Antibes">
+                <img src="https://example.com/antibes.jpg" alt="Maison Antibes">
+                <div style="padding: 15px;">
+                    <h3>Maison Antibes</h3>
+                    <p>4 chambres | 220 m²</p>
+                    <a href="page_villa_4.html" style="text-decoration: none; color: #333; font-weight: bold;">Découvrir ce bien</a>
+                </div>
+            </div>
+
+            <!-- Vignette 5 -->
+            <div class="col option" data-produit="Maison" data-saveur="Antibes">
+                <img src="https://example.com/antibes.jpg" alt="Maison Antibes">
+                <div style="padding: 15px;">
+                    <h3>Maison Nice</h3>
+                    <p>4 chambres | 220 m²</p>
+                    <a href="page_villa_5.html" style="text-decoration: none; color: #333; font-weight: bold;">Découvrir ce bien</a>
+                </div>
+            </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Sélectionnez tous les liens "Découvrir ce bien"
-            const options = document.querySelectorAll('.option');
-    
-            const villas = [];
-            options.forEach(option => {
-                const villaName = option.getAttribute('data-saveur'); // Récupère le nom de la villa
-                const villaData = {
-                    id: villaName.toLowerCase().replace(/\s+/g, '-'), // Création d'un ID en minuscule et remplace les espaces par des tirets
-                    name: villaName
-                };
-                villas.push(villaData);
-            });
-            localStorage.setItem('villas', JSON.stringify(villas)); // Stocke les informations des villas dans le localStorage
-            console.log("Villas stockées :", villas); // Debug : affiche les villas stockées
-        });
-    </script>
-
     <footer>
         <p>Chef d'entreprise: John Doe</p>
     </footer>
