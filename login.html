@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Administrateur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            background: #333;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: auto;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #d4af37;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b3952c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Connexion Administrateur</h2>
+        <input type="password" id="adminPassword" placeholder="Mot de passe administrateur">
+        <button onclick="login()">Se connecter</button>
+    </div>
+
+    <script>
+        function login() {
+            const password = document.getElementById("adminPassword").value;
+
+            // Vérifiez le mot de passe administrateur
+            if (password === "admin123") { // Remplacez "admin123" par votre mot de passe
+                localStorage.setItem("isAdmin", "true"); // Stocke l'état de connexion admin
+                window.location.href = "admin.html"; // Redirige vers la page admin
+            } else {
+                alert("Mot de passe incorrect !");
+            }
+        }
+    </script>
+</body>
+</html>

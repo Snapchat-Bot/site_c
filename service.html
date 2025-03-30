@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Sélection de biens</title>
+    <style>
+        /* Vos styles existants ici */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            line-height: 1.6;
+            background: url('repete.jpg') repeat -110px -100px;
+        }
+
+        header {
+            background-color: transparent;
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(212, 175, 55, 0.1);
+        }
+
+        header img {
+            height: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: transparent;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: #ffffff;
+            padding: 15px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            display: block;
+            height: 2px;
+            background-color: #ffffff;
+            width: 0;
+            transition: width 0.3s ease;
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background-color:transparent;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .col {
+            flex: 1 1 calc(33.333% - 20px);
+            max-width: calc(33.333% - 20px);
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .col img {
+            width: 100%;
+            height: auto;
+        }
+        .col h3 {
+            margin: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+        .col p {
+            margin: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .col a {
+            display: block;
+            margin: 10px;
+            text-decoration: none;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        .col a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+            border : none
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 28px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            header img {
+                height: 50px;
+            }
+            .hero h1 {
+                font-size: 36px;
+            }
+            .container {
+                padding: 20px 10px;
+            }
+            nav a {
+                padding: 10px 15px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header img {
+                height: 40px;
+            }
+            .hero h1 {
+                font-size: 28px;
+            }
+            nav a {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo de l'entreprise">
+    </header>
+    <nav>
+        <a href="index.html" class="underline-hover">Accueil</a>
+        <a href="service.html" class="underline-hover">Services</a>
+        <a href="#apropos" class="underline-hover">À propos</a>
+        <a href="#contact" class="underline-hover">Contact</a>
+        <a href="login.html" class="underline-hover">Connexion</a>
+    </nav>
+    <section class="hero">
+        <h1>Bienvenue sur nos biens</h1>
+        <p>Découvrez notre sélection exclusive de villas et maisons.</p>
+    </section>
+    <div class="container">
+        <h2>Sélection de biens</h2>
+        <div class="row">
+            <!-- Vignette 1 -->
+            <div class="col option" data-produit="Villa" data-saveur="Saint-Tropez">
+                <img src="https://photo.barnes-international.com/annonces/bms/103/min/webp/7ec782d11f43f61f3649bb64c21c8990_346d5f9f36_1920-original.webp" alt="Villa Saint-Tropez">
+                <div style="padding: 15px;">
+                    <h3>Villa Saint-Tropez</h3>
+                    <p>5 chambres | 250 m²</p>
+                    <a href="page_villa_1.html" style="text-decoration: none; color: #333; font-weight: bold;">Découvrir ce bien</a>
+                </div>
+            </div>
+
+            <!-- Vignette 2 -->
+            <div class="col option" data-produit="Maison" data-saveur="Vallauris">
+                <img src="https://photo.barnes-international.com/annonces/bms/17/min/webp/79f3d94eadcc382ad0ef17314608b70d_98d15f0848_1920-original.webp" alt="Maison Vallauris">
+                <div style="padding: 15px;">
+                    <h3>Maison Vallauris</h3>
+                    <p>296 m²</p>
+                    <a href="page_villa_2.html" style="text-decoration: none; color: #333; font-weight: bold;">Découvrir ce bien</a>
+                </div>
+            </div>
+
+            <!-- Vignette 3 -->
+            <div class="col option" data-produit="Maison" data-saveur="Cassis">
+                <img src="https://photo.barnes-international.com/annonces/bms/56/min/webp/a995af09b1449bd03a741ae1fdfa79f1_da8f51ba0f_1920-original.webp" alt="Maison Cassis">
+                <div style="padding: 15px;">
+                    <h3>Maison Cassis</h3>
+                    <p>3 chambres | 160 m²</p>
+                    <a href="page_villa_3.html" style="text-decoration: none; color: #333; font-weight: bold;">Découvrir ce bien</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sélectionnez tous les liens "Découvrir ce bien"
+            const options = document.querySelectorAll('.option');
+    
+            const villas = [];
+            options.forEach(option => {
+                const villaName = option.getAttribute('data-saveur'); // Récupère le nom de la villa
+                const villaData = {
+                    id: villaName.toLowerCase().replace(/\s+/g, '-'), // Création d'un ID en minuscule et remplace les espaces par des tirets
+                    name: villaName
+                };
+                villas.push(villaData);
+            });
+            localStorage.setItem('villas', JSON.stringify(villas)); // Stocke les informations des villas dans le localStorage
+            console.log("Villas stockées :", villas); // Debug : affiche les villas stockées
+        });
+    </script>
+
+    <footer>
+        <p>Chef d'entreprise: John Doe</p>
+    </footer>
+</body>
+</html>
