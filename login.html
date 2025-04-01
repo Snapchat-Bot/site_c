@@ -37,26 +37,51 @@
             background-color: #b3952c;
         }
     </style>
+    <script type="module">
+        // Import Firebase libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCS4ix7FePyQaRYlRXVxi5ghS7bI25kJVI",
+            authDomain: "site-concierge.firebaseapp.com",
+            projectId: "site-concierge",
+            storageBucket: "site-concierge.firebasestorage.app",
+            messagingSenderId: "863521292746",
+            appId: "1:863521292746:web:9ec193e10e42f4f5680f33",
+            measurementId: "G-6F7ZQLQHF9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginForm = document.getElementById("login-form");
+            loginForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const email = loginForm["email"].value;
+                const password = loginForm["password"].value;
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    localStorage.setItem("isAdmin", "true");
+                    window.location.href = "admin.html";
+                } catch (error) {
+                    alert("Erreur de connexion : " + error.message);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Connexion Administrateur</h2>
-        <input type="password" id="adminPassword" placeholder="Mot de passe administrateur">
-        <button onclick="login()">Se connecter</button>
+        <form id="login-form">
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
     </div>
-
-    <script>
-        function login() {
-            const password = document.getElementById("adminPassword").value;
-
-            // Vérifiez le mot de passe administrateur
-            if (password === "admin123") { // Remplacez "admin123" par votre mot de passe
-                localStorage.setItem("isAdmin", "true"); // Stocke l'état de connexion admin
-                window.location.href = "admin.html"; // Redirige vers la page admin
-            } else {
-                alert("Mot de passe incorrect !");
-            }
-        }
-    </script>
 </body>
 </html>

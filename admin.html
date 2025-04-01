@@ -84,32 +84,40 @@
             cursor: pointer;
         }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCS4ix7FePyQaRYlRXVxi5ghS7bI25kJVI",
             authDomain: "site-concierge.firebaseapp.com",
             projectId: "site-concierge",
-            storageBucket: "site-concierge.appspot.com",
+            storageBucket: "site-concierge.firebasestorage.app",
             messagingSenderId: "863521292746",
             appId: "1:863521292746:web:9ec193e10e42f4f5680f33",
             measurementId: "G-6F7ZQLQHF9"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
         let blockedDates = {}; 
         let currentDate = new Date();
 
-        document.addEventListener("DOMContentLoaded", async () => {
-            await ensureProductsExist(); 
-            await loadProducts(); 
-            await renderCalendar(currentDate); 
+        document.addEventListener("DOMContentLoaded", () => {
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    // Redirige l'utilisateur non authentifié vers la page de connexion
+                    window.location.href = "login.html";
+                } else {
+                    // L'utilisateur est authentifié, continuez à charger la page
+                    loadProductsFromFirebase();
+                    renderCalendar(currentDate);
+                }
+            });
 
             document.getElementById('prevMonthBtn').addEventListener('click', () => {
                 currentDate.setMonth(currentDate.getMonth() - 1);
@@ -120,49 +128,31 @@
                 currentDate.setMonth(currentDate.getMonth() + 1);
                 renderCalendar(currentDate);
             });
+
+            document.getElementById('villa-select').addEventListener('change', async () => {
+                await renderCalendar(currentDate);
+            });
         });
 
-        async function ensureProductsExist() {
-            let products = JSON.parse(localStorage.getItem("products"));
-            if (!products || products.length === 0) {
-                products = [
-                    { id: "saint-tropez", name: "Villa Saint-Tropez" },
-                    { id: "vallauris", name: "Maison Vallauris" },
-                    { id: "antibes", name: "Maison Antibes" }
-                ];
-                localStorage.setItem("products", JSON.stringify(products));
-                console.log("Produits initialisés:", products);
-            } else {
-                console.log("Produits existants:", products);
-            }
-        }
-
-        async function loadProducts() {
+        async function loadProductsFromFirebase() {
             const villaSelect = document.getElementById("villa-select");
             villaSelect.innerHTML = ""; 
 
-            const products = JSON.parse(localStorage.getItem("products")) || [];
-            console.log("Produits chargés:", products);
-
-            products.forEach(product => {
+            const querySnapshot = await getDocs(collection(db, "products"));
+            querySnapshot.forEach((doc) => {
                 const option = document.createElement("option");
-                option.value = product.id;
-                option.textContent = product.name;
+                option.value = doc.id;
+                option.textContent = doc.data().name;
                 villaSelect.appendChild(option);
             });
 
-            if (products.length > 0) {
-                villaSelect.value = products[0].id;
+            if (villaSelect.options.length > 0) {
                 await renderCalendar(currentDate);
             }
-
-            villaSelect.addEventListener("change", async () => {
-                await renderCalendar(currentDate);
-            });
         }
 
         async function loadBlockedDates(villaId) {
-            const docRef = doc(db, "blockedDates", villaId);
+            const docRef = doc(db, "blockedDates", villaId); 
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
@@ -206,29 +196,27 @@
 
         async function renderCalendar(date) {
             const selectedProduct = document.getElementById("villa-select").value;
-            await loadBlockedDates(selectedProduct);  // Charge les dates bloquées pour la villa choisie
+            await loadBlockedDates(selectedProduct); 
 
             const calendar = document.getElementById("calendar");
-            calendar.innerHTML = '';  // Vider le calendrier avant de le remplir
+            calendar.innerHTML = ''; 
 
             const year = date.getFullYear();
             const month = date.getMonth();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();  // Nombre de jours dans le mois courant
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            const firstDayOfMonth = new Date(year, month, 1);  // Premier jour du mois
-            const startingDay = firstDayOfMonth.getDay();  // Jour de la semaine du premier jour (dimanche = 0, lundi = 1, etc.)
+            const firstDayOfMonth = new Date(year, month, 1); 
+            const startingDay = firstDayOfMonth.getDay(); 
 
             const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
             document.getElementById('monthName').textContent = `${monthNames[month]} ${year}`;
 
-            // Ajouter les cases vides pour les jours avant le début du mois
             for (let i = 0; i < startingDay; i++) {
                 const emptyCell = document.createElement('div');
                 emptyCell.classList.add('day', 'empty');
                 calendar.appendChild(emptyCell);
             }
 
-            // Ajouter les jours du mois
             for (let day = 1; day <= daysInMonth; day++) {
                 const dayCell = document.createElement('div');
                 dayCell.classList.add('day');
@@ -237,7 +225,6 @@
                 const formattedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
                 dayCell.dataset.date = formattedDate;
 
-                // Vérifier si la date est bloquée
                 if (blockedDates[selectedProduct]?.includes(formattedDate)) {
                     dayCell.classList.add('blocked');
                 } else {
@@ -250,8 +237,12 @@
         }
 
         function logout() {
-            localStorage.removeItem("isAdmin");
-            window.location.href = "login.html";
+            signOut(auth).then(() => {
+                localStorage.removeItem("isAdmin");
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Error signing out: ", error);
+            });
         }
     </script>
 </head>
@@ -262,14 +253,12 @@
         <select id="villa-select"></select>
         <div class="calendar-container">
             <div class="calendar-header">
-                <button class="month-button" id="prevMonthBtn">⬅</button>
+                <button id="prevMonthBtn" class="month-button">Précédent</button>
                 <span id="monthName"></span>
-                <button class="month-button" id="nextMonthBtn">➡</button>
+                <button id="nextMonthBtn" class="month-button">Suivant</button>
             </div>
-            <div class="calendar" id="calendar"></div>
+            <div id="calendar" class="calendar"></div>
         </div>
-        <button onclick="resetBlockedDates()">Réinitialiser les dates</button>
-        <button onclick="logout()">Déconnexion</button>
     </div>
 </body>
 </html>
